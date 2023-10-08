@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+const session = require('express-session');
 var logger = require('morgan');
 var mongoose = require('mongoose')
 var User = require("./routes/Register")
@@ -21,6 +22,13 @@ if(err){
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }, // Set to true in a production environment with HTTPS
+}));
 
 app.use(cookieParser());
 
