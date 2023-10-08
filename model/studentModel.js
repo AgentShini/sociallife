@@ -1,13 +1,12 @@
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-var studentSchema = mongoose.Schema({
+var studentSchema = new Schema({
     Name:String,
     Age:Number,
     Department:String
 })
 
-var studentModel = mongoose.model("Student",studentSchema)
 
-module.exports = {
-    studentModel
-}
+
+module.exports = mongoose.model("Student",studentSchema)
