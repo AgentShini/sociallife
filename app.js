@@ -4,9 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose')
+var User = require("./routes/Register")
+var Log = require("./routes/Login")
 var app = express();
 
-mongoose.connect("mongodb://localhost:27017/test")
+
+mongoose.connect("mongodb://localhost:27017/sociallife")
 mongoose.connection.on('connected',(err)=>{
 if(err){
   console.log(err)
@@ -18,9 +21,12 @@ if(err){
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 app.use(cookieParser());
 
 
+app.use("/Auth",User)
+app.use("/Login",Log)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
