@@ -8,6 +8,8 @@ var mongoose = require('mongoose')
 var User = require("./routes/Register")
 var Log = require("./routes/Login")
 var Analytics = require("./routes/Create_Post")
+var Premium = require("./routes/Premium")
+var AutoPost = require("./routes/Auto_Post")
 var app = express();
 
 
@@ -37,6 +39,8 @@ app.use(cookieParser());
 app.use("/Analytics",Analytics)
 app.use("/Auth",User)
 app.use("/Login",Log)
+app.use("/Premium",Premium)
+app.use("/Auto",AutoPost)
 
 
 

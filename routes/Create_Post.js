@@ -119,4 +119,28 @@ router.post("/Create", async (req, res) => {
   }
 });
 
+
+router.get("/scheduledPosts", (req, res) => {
+  // Return all scheduled posts for the user
+});
+
+router.put("/editScheduledPost/:postId", (req, res) => {
+  // Implement logic to edit a scheduled post by postId
+});
+
+router.delete("/deleteScheduledPost/:postId", (req, res) => {
+  // Implement logic to delete a scheduled post by postId
+});
+
+
+
+const checkPostOwnership = (req, res, next) => {
+  // Check if the user owns the scheduled post
+  if (req.user._id.equals(req.post.user_id)) {
+    next(); // User owns the post, proceed
+  } else {
+    res.status(403).json({ error: 'Permission denied' });
+  }
+};
+
 module.exports = router;

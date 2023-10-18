@@ -10,10 +10,7 @@ router.post("/register", async (req, res) => {
       password,
       fullname,
       username,
-      followers_count,
-      tweets_count,
       location,
-      description,
       social_media_accounts, // Array of social media accounts
     } = req.body;
 
@@ -25,10 +22,7 @@ router.post("/register", async (req, res) => {
       hash: encrypted,
       fullname: fullname,
       username: username,
-      followers_count: followers_count,
-      tweets_count: tweets_count,
       location: location,
-      description: description,
       social_media_accounts: social_media_accounts, // Include social media accounts
     });
 
