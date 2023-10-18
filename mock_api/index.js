@@ -65,7 +65,7 @@ app.get('/api/instagram/analytics/:username', (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log('Mock Twitter API is running on port 3000');
+  console.log("API's is running on port 3000");
 });
 
 

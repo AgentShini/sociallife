@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const User = require("../model/usermodel");
-const Post = require("../model/scheduledpostmodel");
+const Post = require("../model/postmodel");
 const Analytics = require("../model/analyticsmodel");
 
 // Get analytics for a user
@@ -79,7 +79,7 @@ router.get("/Analytics/:username", (req, res) => {
 // Create a post and analytics
 router.post("/Create", async (req, res) => {
   try {
-    const { username, content, platform, engagement, likes_count, retweets_count, comments_count, views_count, clicks_count } = req.body;
+    const { username, content, platform} = req.body;
     const user = await User.findOne({ username });
 
     if (user) {
@@ -87,26 +87,13 @@ router.post("/Create", async (req, res) => {
         user_id: user._id,
         username,
         content,
-        scheduled_time: new Date(),
-        social_media_platform: platform,
-        likes_count,
-        retweets_count,
-        comments_count,
-        views_count,
-        clicks_count,
+        social_media_platform: platform
       });
 
       const analytics = await Analytics.create({
         post_id: createdPost._id,
         username,
-        engagement_type: engagement,
-        engagement_timestamp: new Date(),
         user_id: user._id,
-        likes_count,
-        retweets_count,
-        comments_count,
-        views_count,
-        clicks_count,
       });
 
       return res.status(201).json({ message: "Post created successfully", post: createdPost, analytics });

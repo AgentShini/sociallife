@@ -5,11 +5,11 @@ var cookieParser = require('cookie-parser');
 const session = require('express-session');
 var logger = require('morgan');
 var mongoose = require('mongoose')
-var User = require("./routes/Register")
-var Log = require("./routes/Login")
-var Analytics = require("./routes/Create_Post")
-var Premium = require("./routes/Premium")
-var AutoPost = require("./routes/Auto_Post")
+var register = require("./routes/Register")
+var login = require("./routes/Login")
+var analytics = require("./routes/Create_Post")
+var premium = require("./routes/Premium")
+var autoPost = require("./routes/Auto_Post")
 var app = express();
 
 
@@ -36,11 +36,7 @@ app.use(session({
 
 app.use(cookieParser());
 
-app.use("/Analytics",Analytics)
-app.use("/Auth",User)
-app.use("/Login",Log)
-app.use("/Premium",Premium)
-app.use("/Auto",AutoPost)
+app.use("/api",analytics,register,login,premium,autoPost)
 
 
 
