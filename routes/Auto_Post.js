@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router();
 const schedule = require('node-schedule');
 
+const User = require("../model/usermodel");
+const Post = require("../model/postmodel");
+const Analytics = require("../model/analyticsmodel");
+const ScheduledPost = require("../model/scheduledpostmodel");
+
 // Create an array of tweets to post
 const tweetsToPost = [
   "Good morning, everyone!",
@@ -18,7 +23,18 @@ const postingTimes = [
 
 // Post tweets function
 async function postTweet(tweet) {
-  // Replace this with actual code to post a tweet using the Twitter API or other social media APIs
+ const {
+  userid,
+  content,
+  platform,
+  analyticid,
+    email,
+    password,
+    fullname,
+    username,
+    location,
+    social_media_accounts, // Array of social media accounts
+  } = req.body;
   console.log(`Posted tweet: ${tweet}`);
 }
 
@@ -33,5 +49,7 @@ router.post('/schedule-posts', (req, res) => {
 
   res.status(200).json({ message: 'Automated posting scheduled.' });
 });
+
+
 
 module.exports = router;

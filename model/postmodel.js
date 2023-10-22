@@ -5,7 +5,7 @@ const PostSchema = new Schema({
   user_id: { type: String, ref: 'User', required: true },
   username: { type: String, required: true },
   content: { type: String, required: true },
-  social_media_platform: { type: String, required: true },
+  social_media_platform: { type: String, required: true,default:'Twitter'},
   analytics_id: { type: String, ref: 'Analytics', default: 'NULL' },
   likes_count: { type: Number, default: 0 },   // Add likes count field
   retweets_count: { type: Number, default: 0 }, // Add retweets count field

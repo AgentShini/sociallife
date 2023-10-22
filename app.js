@@ -7,9 +7,11 @@ var logger = require('morgan');
 var mongoose = require('mongoose')
 var register = require("./routes/Register")
 var login = require("./routes/Login")
-var analytics = require("./routes/Create_Post")
+var posts = require("./routes/Posts")
 var premium = require("./routes/Premium")
 var autoPost = require("./routes/Auto_Post")
+var userdata = require("./routes/userdata")
+var createPost = require("./routes/create_post")
 var app = express();
 
 
@@ -36,7 +38,7 @@ app.use(session({
 
 app.use(cookieParser());
 
-app.use("/api",analytics,register,login,premium,autoPost)
+app.use("/api",posts,register,login,premium,autoPost,userdata,createPost)
 
 
 
