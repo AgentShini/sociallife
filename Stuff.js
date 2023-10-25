@@ -1,36 +1,45 @@
-User
-router.post("/Create",async(req,res)=>{
-    try{
-    const { username,content,platform,engagement} = req.body
-    const user = await User.findOne({username})
-    if(user){
-        const userID = user._id
-        await Post.create({user_id:userID,
-        content:content, scheduled_time:Date.now(),
-       social_media_platform:platform,
+const express = require('express');
+const router = express.Router();
+const schedule = require('node-schedule');
+const Twit = require('twit'); // Import the twit library
+
+const User = require('../model/usermodel');
+const Post = require('../model/postmodel');
+const Analytics = require('../model/analyticsmodel');
+const ScheduledPost = require('../model/scheduledpostmodel');
+
+// Initialize the Twitter API client with your API keys and access tokens
+const T = new Twit({
+  consumer_key: 'YOUR_CONSUMER_KEY',
+  consumer_secret: 'YOUR_CONSUMER_SECRET',
+  access_token: 'YOUR_ACCESS_TOKEN',
+  access_token_secret: 'YOUR_ACCESS_TOKEN_SECRET',
+});
+
+// Create a route to trigger automated posting
+router.post('/schedule-posts', (req, res) => {
+  const { username, content, time } = req.body;
+
+  if (!content || !time) {
+    return res.status(400).json({ error: 'Invalid request data' });
+  }
+
+  // Schedule automated posting based on the provided time
+  const scheduledTime = new Date(time);
+
+  // Schedule the job to post the provided content at the specified time
+  schedule.scheduleJob(scheduledTime, function () {
+    // Use the Twitter API to post the content
+    T.post('statuses/update', { status: content }, (err, data, response) => {
+      if (err) {
+        console.error('Error posting to Twitter:', err);
+      } else {
+        console.log('Posted to Twitter:', content);
+      }
     });
+  });
 
-    const post = await Post.findOne({user_id:userID})
-    if(post){
-        const ID = post.user_id
-        await Analytics.create({
-            post_id: ID,
-            engagement_type:engagement,
-            engagement_timestamp:Date.now(),
-            user_id:userID
-        });
+  res.status(200).json({ message: 'Automated posting scheduled.' });
+});
 
-    }else{
-        res.status(401).json({message:"ERROR FINDING POST"})
-    }
-    }else{
-        res.status(401).json({message:"User not found"})
-    }
-}catch(error){
-    console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
-}
-
-
-
-})
+module.exports = router;

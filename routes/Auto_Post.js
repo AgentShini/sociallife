@@ -1,55 +1,50 @@
 const express = require('express');
 const router = express.Router();
+const User = require('../model/usermodel');
+const Post = require('../model/postmodel');
+const Analytics = require('../model/analyticsmodel');
 const schedule = require('node-schedule');
 
-const User = require("../model/usermodel");
-const Post = require("../model/postmodel");
-const Analytics = require("../model/analyticsmodel");
-const ScheduledPost = require("../model/scheduledpostmodel");
-
-// Create an array of tweets to post
-const tweetsToPost = [
-  "Good morning, everyone!",
-  "Just posted a new blog article. Check it out!",
-  "Enjoying a great day at the park. #relaxing",
-];
-
-// Schedule tweets to be posted every day at specific times (e.g., 9 AM, 1 PM, 5 PM)
-const postingTimes = [
-  { hour: 9, minute: 0 },
-  { hour: 13, minute: 0 },
-  { hour: 17, minute: 0 },
-];
-
-// Post tweets function
-async function postTweet(tweet) {
- const {
-  userid,
-  content,
-  platform,
-  analyticid,
-    email,
-    password,
-    fullname,
-    username,
-    location,
-    social_media_accounts, // Array of social media accounts
-  } = req.body;
-  console.log(`Posted tweet: ${tweet}`);
-}
-
 // Create a route to trigger automated posting
-router.post('/schedule-posts', (req, res) => {
-  // Schedule the tweets to be posted
-  postingTimes.forEach((time, index) => {
-    schedule.scheduleJob(time, function () {
-      postTweet(tweetsToPost[index]);
+router.post('/schedule_post', async (req, res) => {
+  try {
+    const { username, content, time } = req.body;
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Create an Analytics document
+    const analytics = await Analytics.create({
+      post_id: null,
+      username: user.username,
+      user_id: user._id,
     });
-  });
 
-  res.status(200).json({ message: 'Automated posting scheduled.' });
+    // Create a Post document
+    const post = await Post.create({
+      user_id: user._id,
+      username: user.username,
+      content: content,
+      analytics_id: analytics._id,
+    });
+
+    // Update the post_id in the Analytics document
+    analytics.post_id = post._id;
+    await analytics.save();
+
+    // Schedule the post based on the provided time
+    schedule.scheduleJob(time, function () {
+      console.log(`Automated post for ${user.username} at ${time}: ${content}`);
+      // You can add the logic to post to a social media platform here
+    });
+
+    res.status(200).json({ message: 'Automated posting scheduled.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
 });
-
-
 
 module.exports = router;

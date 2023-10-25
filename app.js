@@ -12,6 +12,7 @@ var premium = require("./routes/Premium")
 var autoPost = require("./routes/Auto_Post")
 var userdata = require("./routes/userdata")
 var createPost = require("./routes/create_post")
+var engage = require("./routes/engage")
 var app = express();
 
 
@@ -38,7 +39,7 @@ app.use(session({
 
 app.use(cookieParser());
 
-app.use("/api",posts,register,login,premium,autoPost,userdata,createPost)
+app.use("/api",posts,register,login,premium,autoPost,userdata,createPost,engage)
 
 
 

@@ -1,23 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const schedule = require('node-schedule');
-
 const User = require("../model/usermodel");
 const Post = require("../model/postmodel");
 const Analytics = require("../model/analyticsmodel");
 
-
-// Create an array of tweets to post
-const tweetsToPost = [
-  "Good morning, everyone!",
-  "Just posted a new blog article. Check it out!",
-  "Enjoying a great day at the park. #relaxing",
-];
-
-// Post tweets function
-async function postTweet(tweet) {
-
-}
 
 // Create a route to trigger automated posting
 router.post('/create_post', async(req, res) => {
